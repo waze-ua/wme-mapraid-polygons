@@ -12,9 +12,9 @@
 // @require      https://greasyfork.org/scripts/389117-apihelper/code/APIHelper.js
 // @require      https://greasyfork.org/scripts/389577-apihelperui/code/APIHelperUI.js
 // @require      https://greasyfork.org/scripts/389765-common-utils/code/CommonUtils.js
-// @updateURL
-// @downloadURL
-// @supportURL
+// @updateURL    https://github.com/waze-ua/wme-mapraid-polygons/raw/master/wme-mapraid-polygons.user.js
+// @downloadURL  https://github.com/waze-ua/wme-mapraid-polygons/raw/master/wme-mapraid-polygons.user.js
+// @supportURL   https://github.com/waze-ua/wme-mapraid-polygons/issues
 // ==/UserScript==
 
 /* jshint esversion: 6 */
