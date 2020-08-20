@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME MapRaid Polygons
 // @namespace    waze-ua
-// @version      2020.08.20.002
+// @version      2020.08.20.003
 // @description  Retrieves polygons from spreadsheet and display as borders on a map
 // @author       madnut
 // @include      https://*waze.com/*editor*
@@ -35,7 +35,7 @@
     const NAME = 'MapRaid Polygons';
 
     const requestsTimeout = 10000; // in ms
-    const requestHash = "AKfycbzxG8NJKkIUXaSIDGuSooG9dmNrQzHbgWMwx4kScv0b";
+    const requestHash = "AKfycbxaDfpcXF9c66F-GHIf3H3EBV7zkUtEJ8JY-xotosmspaDlcbbZ";
 
     // Translations
     const TRANSLATIONS = {
