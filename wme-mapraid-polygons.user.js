@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME MapRaid Polygons
 // @namespace    waze-ua
-// @version      2020.08.20.001
+// @version      2020.08.20.002
 // @description  Retrieves polygons from spreadsheet and display as borders on a map
 // @author       madnut
 // @include      https://*waze.com/*editor*
@@ -102,7 +102,9 @@
     APIHelper.bootstrap();
     APIHelper.addTranslation(NAME, TRANSLATIONS);
     APIHelper.addStyle(
-        '.mapraid-polygons legend { font-size: 14px; font-weight: bold; margin: 0px 0px 10px 0px; padding: 10px 0px 0px 0px; }'// +
+        '.mapraid-polygons legend { font-size: 14px; font-weight: bold; margin: 0px 0px 10px 0px; padding: 10px 0px 0px 0px; }' +
+        'div.mapraid-polygons > .control-label { font-size: 14px; font-weight: bold; margin: 0px 0px 10px 0px; padding: 10px 0px 0px 0px; }' +
+        'div.mapraid-polygons > .controls > fieldset { border: 1px solid #ddd; padding: 4px; }' //+
     );
 
     let WMPSettings = new Settings(NAME, settings);
@@ -202,8 +204,8 @@
             loadPolygons();
         });
         // Add container for polygons
-        let fsPolygons = helper.createFieldset(I18n.t(NAME).polygons);
-        tab.addElement(fsPolygons);
+        let panelPolygons = helper.createPanel(I18n.t(NAME).polygons);
+        tab.addElement(panelPolygons);
 
         // Add settings section
         let fsSettings = helper.createFieldset(I18n.t(NAME).settings);
@@ -219,30 +221,31 @@
     }
 
     function populatePolygonsList(data) {
-        let fsPolygons = helper.createFieldset(I18n.t(NAME).polygons);
-        let oldFieldset = document.querySelector('fieldset.mapraid-polygons');
-        let container = document.querySelector('#sidepanel-mapraid-polygons .button-toolbar');
+        let container = document.querySelector('div.mapraid-polygons .controls');
+        container.innerHTML = '';
+
         if (data) {
-            data.forEach(function (item) {
-                if (item.status == 'active') {
-                    let hash = item.polygon.hashCode();
-                    fsPolygons.addCheckbox(hash, item.name, item.comments, function (event) {
-                        let feature = bordersLayer.getFeatureByFid(event.target.name);
-                        feature.style.display = event.target.checked ? '' : 'none';
-                        WMPSettings.set(['polygons', event.target.name], event.target.checked);
-                        bordersLayer.redraw();
-                    }, WMPSettings.has('polygons', hash) ? WMPSettings.get('polygons', hash) : true);
-                }
-            });
-            let newFieldset = fsPolygons.toHTML();
-            newFieldset.className = oldFieldset.className;
-            container.replaceChild(newFieldset, oldFieldset);
-            // colorize, separate loop for now
-            data.forEach(function (item) {
-                if (item.status == 'active') {
-                    let chkLabel = document.querySelector('label[for="mapraid-polygons-' + item.polygon.hashCode() + '"]');
-                    chkLabel.style['background-color'] = item.color;
-                }
+            Object.keys(data).forEach(function(group) {
+                let fsGroup = helper.createFieldset(group);
+                data[group].forEach(function (item) {
+                    if (item.status == 'active') {
+                        let hash = item.polygon.hashCode();
+                        fsGroup.addCheckbox(hash, item.name, item.comments, function (event) {
+                            let feature = bordersLayer.getFeatureByFid(event.target.name);
+                            feature.style.display = event.target.checked ? '' : 'none';
+                            WMPSettings.set(['polygons', event.target.name], event.target.checked);
+                            bordersLayer.redraw();
+                        }, WMPSettings.has('polygons', hash) ? WMPSettings.get('polygons', hash) : true);
+                    }
+                });
+                container.appendChild(fsGroup.toHTML());
+                // colorize, separate loop for now
+                data[group].forEach(function (item) {
+                    if (item.status == 'active') {
+                        let chkLabel = document.querySelector('label[for="mapraid-polygons-' + item.polygon.hashCode() + '"]');
+                        chkLabel.style['background-color'] = item.color;
+                    }
+                });
             });
         }
     }
@@ -254,14 +257,16 @@
             parser.internalProjection = W.map.getProjectionObject();
             parser.externalProjection = new OpenLayers.Projection("EPSG:4326");
 
-            data.forEach(function (item) {
-                let feature = parser.read(item.polygon);
+            Object.keys(data).forEach(function (group) {
+                data[group].forEach(function (item) {
+                    let feature = parser.read(item.polygon);
 
-                if (feature) {
-                    feature.fid = item.polygon.hashCode();
-                    feature.style = new borderStyle(item.color, item.name, item.status == 'active' ? true : false);
-                    bordersLayer.addFeatures(feature);
-                }
+                    if (feature) {
+                        feature.fid = item.polygon.hashCode();
+                        feature.style = new borderStyle(item.color, item.name, item.status == 'active' ? true : false);
+                        bordersLayer.addFeatures(feature);
+                    }
+                });
             });
         }
     }
