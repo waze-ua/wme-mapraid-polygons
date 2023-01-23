@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WME MapRaid Polygons
 // @namespace    https://greasyfork.org/ru/users/160654-waze-ukraine
-// @version      2023.01.23.002
+// @version      2023.01.23.003
 // @description  Retrieves polygons from spreadsheet and display as borders on a map
 // @author       madnut
 // @include      https://*waze.com/*editor*
@@ -12,8 +12,8 @@
 // @require      https://github.com/AntonShevchuk/wme-api-helper/raw/master/APIHelper.js
 // @require      https://github.com/AntonShevchuk/wme-api-helper-ui/raw/master/APIHelperUI.js
 // @require      https://greasyfork.org/scripts/389765-common-utils/code/CommonUtils.js
-// @updateURL    https://greasyfork.org/ru/scripts/458676-wme-mapraid-polygons
-// @downloadURL  https://greasyfork.org/ru/scripts/458676-wme-mapraid-polygons
+// @updateURL    https://github.com/waze-ua/wme-mapraid-polygons/raw/master/wme-mapraid-polygons.user.js
+// @downloadURL  https://github.com/waze-ua/wme-mapraid-polygons/raw/master/wme-mapraid-polygons.user.js
 // @supportURL   https://github.com/waze-ua/wme-mapraid-polygons/issues
 // ==/UserScript==
 
